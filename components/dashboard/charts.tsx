@@ -138,14 +138,9 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
                   ...faturamentoData.map((d) => d.services),
                 );
 
-                // Calcular altura baseada no valor mínimo como base
-                const adjustedServices = data.services - minServices;
-                const adjustedMaxServices = maxServices - minServices;
-                const heightPercentage =
-                  adjustedMaxServices > 0
-                    ? (adjustedServices / adjustedMaxServices) * 80
-                    : 0;
-                const height = Math.max(heightPercentage, 5); // Altura mínima de 5%
+                // ALGORITMO SIMPLES E CORRETO: altura proporcional direta
+                const heightPercent = (data.services / maxServices) * 85; // 85% da altura máxima disponível
+                const actualHeight = Math.max(heightPercent, 10); // Mínimo 10%
 
                 const isHovered = hoveredMonth === data.month;
                 const barColor = getColorByValue(
@@ -160,17 +155,22 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
                     className="relative flex flex-col items-center group flex-1"
                   >
                     <div
-                      className={`w-full max-w-[32px] rounded-t-md transition-all duration-200 cursor-pointer relative ${
+                      className={`w-full max-w-[32px] rounded-t-md transition-all duration-200 cursor-pointer relative flex items-end justify-center pb-2 ${
                         isHovered ? "opacity-80 scale-105" : "hover:opacity-80"
                       }`}
                       style={{
-                        height: `${height + 15}%`, // +15% para base visual
+                        height: `${actualHeight}%`,
                         backgroundColor: barColor,
-                        minHeight: "25px",
+                        minHeight: "40px",
                       }}
                       onMouseEnter={() => setHoveredMonth(data.month)}
                       onMouseLeave={() => setHoveredMonth(null)}
                     >
+                      {/* VALOR VISÍVEL DENTRO DA COLUNA */}
+                      <span className="text-xs font-bold text-white transform -rotate-90 whitespace-nowrap">
+                        {data.services}
+                      </span>
+
                       {isHovered && (
                         <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-popover text-popover-foreground px-2 py-1 rounded text-xs whitespace-nowrap border shadow-md z-10">
                           {data.services} serviços
