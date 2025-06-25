@@ -25,7 +25,8 @@ import {
   MoreHorizontal,
   FileText,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 
 interface DashboardRecentProps {
   className?: string;
