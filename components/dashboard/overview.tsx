@@ -1,11 +1,17 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Clock, Car, PenToolIcon as Tool } from "lucide-react"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Clock, Car, PenToolIcon as Tool } from "lucide-react";
 
 export function DashboardOverview() {
   const todayAppointments = [
@@ -37,7 +43,7 @@ export function DashboardOverview() {
       vehicle: "Nissan Kicks 2022",
       service: "Diagnóstico eletrônico",
     },
-  ]
+  ];
 
   const inProgressServices = [
     {
@@ -64,19 +70,23 @@ export function DashboardOverview() {
       mechanic: "Marcos Lima",
       progress: 60,
     },
-  ]
+  ];
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Visão Geral</CardTitle>
-        <CardDescription>Acompanhe os agendamentos e serviços em andamento</CardDescription>
+        <CardTitle>Acompanhamento Geral</CardTitle>
+        <CardDescription>
+          Acompanhe os agendamentos e serviços em andamento
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="agendamentos">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="agendamentos">Agendamentos de Hoje</TabsTrigger>
-            <TabsTrigger value="em-andamento">Serviços em Andamento</TabsTrigger>
+            <TabsTrigger value="em-andamento">
+              Serviços em Andamento
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="agendamentos" className="space-y-4 pt-4">
             <div className="grid gap-4">
@@ -115,10 +125,15 @@ export function DashboardOverview() {
           <TabsContent value="em-andamento" className="space-y-4 pt-4">
             <div className="grid gap-4">
               {inProgressServices.map((service) => (
-                <div key={service.id} className="flex flex-col gap-2 rounded-lg border p-4">
+                <div
+                  key={service.id}
+                  className="flex flex-col gap-2 rounded-lg border p-4"
+                >
                   <div className="flex items-center justify-between">
                     <div className="font-medium">{service.id}</div>
-                    <Badge variant="outline">{service.progress}% Concluído</Badge>
+                    <Badge variant="outline">
+                      {service.progress}% Concluído
+                    </Badge>
                   </div>
                   <div className="grid gap-1">
                     <div className="font-medium">{service.client}</div>
@@ -132,12 +147,18 @@ export function DashboardOverview() {
                     </div>
                   </div>
                   <div className="mt-2 h-2 w-full rounded-full bg-muted">
-                    <div className="h-2 rounded-full bg-primary" style={{ width: `${service.progress}%` }}></div>
+                    <div
+                      className="h-2 rounded-full bg-primary"
+                      style={{ width: `${service.progress}%` }}
+                    ></div>
                   </div>
                   <div className="flex items-center justify-between pt-2">
                     <div className="flex items-center gap-2">
                       <Avatar className="h-6 w-6">
-                        <AvatarImage src={`/placeholder.svg?height=24&width=24`} alt={service.mechanic} />
+                        <AvatarImage
+                          src={`/placeholder.svg?height=24&width=24`}
+                          alt={service.mechanic}
+                        />
                         <AvatarFallback>
                           {service.mechanic
                             .split(" ")
@@ -156,5 +177,5 @@ export function DashboardOverview() {
         </Tabs>
       </CardContent>
     </Card>
-  )
+  );
 }
