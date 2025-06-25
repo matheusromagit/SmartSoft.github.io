@@ -196,6 +196,15 @@ export function DashboardRecent({ className }: DashboardRecentProps) {
           ))}
         </div>
       </CardContent>
+
+      {/* Modal de detalhes da ordem */}
+      {selectedOrder && (
+        <OrdemModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          orderId={selectedOrder}
+        />
+      )}
     </Card>
   );
 }
