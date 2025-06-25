@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { OrdemModal } from "./ordem-modal";
 
 interface DashboardRecentProps {
   className?: string;
