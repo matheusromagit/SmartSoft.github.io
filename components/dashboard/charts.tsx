@@ -60,15 +60,28 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
           <TabsContent value="faturamento" className="space-y-4">
             <div className="h-[280px] w-full flex items-end justify-between gap-2 p-4 relative">
               {faturamentoData.map((data, i) => {
-                const height = Math.max((data.value / maxValue) * 85, 8); // Altura mínima de 8% e máxima de 85%
+                const percentage = (data.value / maxValue) * 100;
+                const height = Math.max(percentage * 0.85, 8); // Altura proporcional real, mínimo 8%
                 const isHovered = hoveredMonth === data.month;
+
+                // Encontrar valores máximo e mínimo para colorir
+                const minValue = Math.min(
+                  ...faturamentoData.map((d) => d.value),
+                );
+                const isMaxValue = data.value === maxValue;
+                const isMinValue = data.value === minValue;
+
+                let colorClass = "bg-primary";
+                if (isMaxValue) colorClass = "bg-green-500";
+                else if (isMinValue) colorClass = "bg-red-500";
+
                 return (
                   <div
                     key={i}
                     className="relative flex flex-col items-center group flex-1"
                   >
                     <div
-                      className={`w-full max-w-[32px] bg-primary rounded-t-md transition-all duration-200 cursor-pointer relative ${
+                      className={`w-full max-w-[32px] ${colorClass} rounded-t-md transition-all duration-200 cursor-pointer relative ${
                         isHovered ? "opacity-80 scale-105" : "hover:opacity-80"
                       }`}
                       style={{ height: `${height}%`, minHeight: "20px" }}
