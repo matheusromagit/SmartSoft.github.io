@@ -15,24 +15,26 @@ interface DashboardChartsProps {
 }
 
 export function DashboardCharts({ className }: DashboardChartsProps) {
-  // Dados de faturamento por mês (em R$) - valores mais variados
+  // Dados com valores MUITO diferentes para garantir visibilidade
   const faturamentoData = [
-    { month: "Jan", value: 32000, services: 25 }, // Menor valor
-    { month: "Fev", value: 48000, services: 38 },
-    { month: "Mar", value: 41000, services: 32 },
-    { month: "Abr", value: 55000, services: 44 },
-    { month: "Mai", value: 62000, services: 50 },
-    { month: "Jun", value: 58000, services: 46 },
-    { month: "Jul", value: 71000, services: 57 },
-    { month: "Ago", value: 67000, services: 54 },
-    { month: "Set", value: 59000, services: 47 },
-    { month: "Out", value: 64000, services: 51 },
-    { month: "Nov", value: 69000, services: 55 },
-    { month: "Dez", value: 78000, services: 63 }, // Maior valor
+    { month: "Jan", value: 25000, services: 20 }, // MENOR
+    { month: "Fev", value: 35000, services: 28 },
+    { month: "Mar", value: 42000, services: 34 },
+    { month: "Abr", value: 38000, services: 30 },
+    { month: "Mai", value: 55000, services: 44 },
+    { month: "Jun", value: 48000, services: 38 },
+    { month: "Jul", value: 62000, services: 50 },
+    { month: "Ago", value: 58000, services: 46 },
+    { month: "Set", value: 45000, services: 36 },
+    { month: "Out", value: 68000, services: 54 },
+    { month: "Nov", value: 72000, services: 58 },
+    { month: "Dez", value: 85000, services: 68 }, // MAIOR
   ];
 
-  const maxValue = Math.max(...faturamentoData.map((d) => d.value));
-  const maxServices = Math.max(...faturamentoData.map((d) => d.services));
+  const maxValue = Math.max(...faturamentoData.map((d) => d.value)); // 85000
+  const minValue = Math.min(...faturamentoData.map((d) => d.value)); // 25000
+  const maxServices = Math.max(...faturamentoData.map((d) => d.services)); // 68
+  const minServices = Math.min(...faturamentoData.map((d) => d.services)); // 20
 
   const [hoveredMonth, setHoveredMonth] = useState<string | null>(null);
 
@@ -43,18 +45,13 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
     }).format(value);
   }, []);
 
-  // Função para calcular cor no degradê verde-vermelho baseado no valor
+  // Função para calcular cor baseada no valor
   const getColorByValue = useCallback(
     (value: number, min: number, max: number) => {
-      // Normaliza o valor entre 0 e 1
       const normalized = (value - min) / (max - min);
-
-      // Calcula RGB: verde (0,255,0) para vermelho (255,0,0)
       const red = Math.round(255 * (1 - normalized));
       const green = Math.round(255 * normalized);
-      const blue = 0;
-
-      return `rgb(${red}, ${green}, ${blue})`;
+      return `rgb(${red}, ${green}, 0)`;
     },
     [],
   );
@@ -73,16 +70,13 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
             <TabsTrigger value="faturamento">Faturamento</TabsTrigger>
             <TabsTrigger value="servicos">Serviços</TabsTrigger>
           </TabsList>
-          <TabsContent value="faturamento" className="space-y-4">
-            <div className="h-[280px] w-full flex items-end justify-between gap-2 p-4 relative">
-              {faturamentoData.map((data, i) => {
-                const minValue = Math.min(
-                  ...faturamentoData.map((d) => d.value),
-                );
 
-                // ALGORITMO SIMPLES E CORRETO: altura proporcional direta
-                const heightPercent = (data.value / maxValue) * 85; // 85% da altura máxima disponível
-                const actualHeight = Math.max(heightPercent, 10); // Mínimo 10%
+          <TabsContent value="faturamento" className="space-y-4">
+            <div className="h-[300px] w-full flex items-end justify-center gap-1 p-4 relative">
+              {faturamentoData.map((data, i) => {
+                // ALTURA DIRETA E SIMPLES: valor/máximo * altura disponível
+                const heightPx = (data.value / maxValue) * 250; // 250px máximo
+                const finalHeight = Math.max(heightPx, 30); // Mínimo 30px
 
                 const isHovered = hoveredMonth === data.month;
                 const barColor = getColorByValue(
@@ -94,27 +88,26 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
                 return (
                   <div
                     key={i}
-                    className="relative flex flex-col items-center group flex-1"
+                    className="relative flex flex-col items-center group"
                   >
                     <div
-                      className={`w-full max-w-[32px] rounded-t-md transition-all duration-200 cursor-pointer relative flex items-end justify-center pb-2 ${
+                      className={`w-8 rounded-t-md transition-all duration-200 cursor-pointer relative flex items-end justify-center pb-1 ${
                         isHovered ? "opacity-80 scale-105" : "hover:opacity-80"
                       }`}
                       style={{
-                        height: `${actualHeight}%`,
+                        height: `${finalHeight}px`,
                         backgroundColor: barColor,
-                        minHeight: "40px",
                       }}
                       onMouseEnter={() => setHoveredMonth(data.month)}
                       onMouseLeave={() => setHoveredMonth(null)}
                     >
-                      {/* VALOR VISÍVEL DENTRO DA COLUNA */}
-                      <span className="text-xs font-bold text-white transform -rotate-90 whitespace-nowrap">
-                        R$ {(data.value / 1000).toFixed(0)}k
+                      {/* Valor dentro da barra */}
+                      <span className="text-[10px] font-bold text-white writing-mode-vertical transform rotate-180">
+                        {Math.round(data.value / 1000)}k
                       </span>
 
                       {isHovered && (
-                        <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-popover text-popover-foreground px-2 py-1 rounded text-xs whitespace-nowrap border shadow-md z-10">
+                        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 rounded text-xs whitespace-nowrap z-10">
                           {formatCurrency(data.value)}
                         </div>
                       )}
@@ -127,20 +120,17 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
               })}
             </div>
             <div className="flex justify-between text-xs text-muted-foreground px-4">
-              <span>R$ 0</span>
+              <span>{formatCurrency(minValue)}</span>
               <span>{formatCurrency(maxValue)}</span>
             </div>
           </TabsContent>
-          <TabsContent value="servicos" className="space-y-4">
-            <div className="h-[280px] w-full flex items-end justify-between gap-2 p-4 relative">
-              {faturamentoData.map((data, i) => {
-                const minServices = Math.min(
-                  ...faturamentoData.map((d) => d.services),
-                );
 
-                // ALGORITMO SIMPLES E CORRETO: altura proporcional direta
-                const heightPercent = (data.services / maxServices) * 85; // 85% da altura máxima disponível
-                const actualHeight = Math.max(heightPercent, 10); // Mínimo 10%
+          <TabsContent value="servicos" className="space-y-4">
+            <div className="h-[300px] w-full flex items-end justify-center gap-1 p-4 relative">
+              {faturamentoData.map((data, i) => {
+                // ALTURA DIRETA E SIMPLES: valor/máximo * altura disponível
+                const heightPx = (data.services / maxServices) * 250; // 250px máximo
+                const finalHeight = Math.max(heightPx, 30); // Mínimo 30px
 
                 const isHovered = hoveredMonth === data.month;
                 const barColor = getColorByValue(
@@ -152,27 +142,26 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
                 return (
                   <div
                     key={i}
-                    className="relative flex flex-col items-center group flex-1"
+                    className="relative flex flex-col items-center group"
                   >
                     <div
-                      className={`w-full max-w-[32px] rounded-t-md transition-all duration-200 cursor-pointer relative flex items-end justify-center pb-2 ${
+                      className={`w-8 rounded-t-md transition-all duration-200 cursor-pointer relative flex items-end justify-center pb-1 ${
                         isHovered ? "opacity-80 scale-105" : "hover:opacity-80"
                       }`}
                       style={{
-                        height: `${actualHeight}%`,
+                        height: `${finalHeight}px`,
                         backgroundColor: barColor,
-                        minHeight: "40px",
                       }}
                       onMouseEnter={() => setHoveredMonth(data.month)}
                       onMouseLeave={() => setHoveredMonth(null)}
                     >
-                      {/* VALOR VISÍVEL DENTRO DA COLUNA */}
-                      <span className="text-xs font-bold text-white transform -rotate-90 whitespace-nowrap">
+                      {/* Valor dentro da barra */}
+                      <span className="text-[10px] font-bold text-white">
                         {data.services}
                       </span>
 
                       {isHovered && (
-                        <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-popover text-popover-foreground px-2 py-1 rounded text-xs whitespace-nowrap border shadow-md z-10">
+                        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 rounded text-xs whitespace-nowrap z-10">
                           {data.services} serviços
                         </div>
                       )}
@@ -185,7 +174,7 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
               })}
             </div>
             <div className="flex justify-between text-xs text-muted-foreground px-4">
-              <span>0 serviços</span>
+              <span>{minServices} serviços</span>
               <span>{maxServices} serviços</span>
             </div>
           </TabsContent>
