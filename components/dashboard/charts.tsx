@@ -36,12 +36,12 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
 
   const [hoveredMonth, setHoveredMonth] = useState<string | null>(null);
 
-  const formatCurrency = (value: number) => {
+  const formatCurrency = useCallback((value: number) => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
       currency: "BRL",
     }).format(value);
-  };
+  }, []);
 
   return (
     <Card className={className}>
