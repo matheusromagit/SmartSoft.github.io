@@ -118,7 +118,7 @@ export function DashboardRecent({ className }: DashboardRecentProps) {
             <div
               key={order.id}
               className="flex items-center gap-4 p-3 rounded-lg border transition-colors hover:bg-accent/50 cursor-pointer group"
-              onClick={() => setSelectedOrder(order.id)}
+              onClick={() => handleViewOrder(order.id)}
             >
               <Avatar className="h-9 w-9">
                 <AvatarImage
