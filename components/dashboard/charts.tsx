@@ -58,25 +58,25 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
             <TabsTrigger value="servicos">Serviços</TabsTrigger>
           </TabsList>
           <TabsContent value="faturamento" className="space-y-4">
-            <div className="h-[300px] w-full flex items-end justify-between gap-1 pt-6 relative">
+            <div className="h-[280px] w-full flex items-end justify-between gap-2 p-4 relative">
               {faturamentoData.map((data, i) => {
-                const height = (data.value / maxValue) * 100;
+                const height = Math.max((data.value / maxValue) * 85, 8); // Altura mínima de 8% e máxima de 85%
                 const isHovered = hoveredMonth === data.month;
                 return (
                   <div
                     key={i}
-                    className="relative flex flex-col items-center group"
+                    className="relative flex flex-col items-center group flex-1"
                   >
                     <div
-                      className={`w-8 bg-primary rounded-t-md transition-all duration-200 cursor-pointer relative ${
+                      className={`w-full max-w-[32px] bg-primary rounded-t-md transition-all duration-200 cursor-pointer relative ${
                         isHovered ? "opacity-80 scale-105" : "hover:opacity-80"
                       }`}
-                      style={{ height: `${Math.max(height, 5)}%` }}
+                      style={{ height: `${height}%`, minHeight: "20px" }}
                       onMouseEnter={() => setHoveredMonth(data.month)}
                       onMouseLeave={() => setHoveredMonth(null)}
                     >
                       {isHovered && (
-                        <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-popover text-popover-foreground px-2 py-1 rounded text-xs whitespace-nowrap border shadow-md">
+                        <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-popover text-popover-foreground px-2 py-1 rounded text-xs whitespace-nowrap border shadow-md z-10">
                           {formatCurrency(data.value)}
                         </div>
                       )}
@@ -88,7 +88,7 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
                 );
               })}
             </div>
-            <div className="flex justify-between text-xs text-muted-foreground">
+            <div className="flex justify-between text-xs text-muted-foreground px-4">
               <span>R$ 0</span>
               <span>{formatCurrency(maxValue)}</span>
             </div>
