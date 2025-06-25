@@ -43,6 +43,22 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
     }).format(value);
   }, []);
 
+  // Função para calcular cor no degradê verde-vermelho baseado no valor
+  const getColorByValue = useCallback(
+    (value: number, min: number, max: number) => {
+      // Normaliza o valor entre 0 e 1
+      const normalized = (value - min) / (max - min);
+
+      // Calcula RGB: verde (0,255,0) para vermelho (255,0,0)
+      const red = Math.round(255 * (1 - normalized));
+      const green = Math.round(255 * normalized);
+      const blue = 0;
+
+      return `rgb(${red}, ${green}, ${blue})`;
+    },
+    [],
+  );
+
   return (
     <Card className={className}>
       <CardHeader>
