@@ -84,25 +84,27 @@ export function DashboardRecent({ className }: DashboardRecentProps) {
     },
   ];
 
-  const handleViewOrder = (orderId: string) => {
-    // Simula navegação para a página da ordem
-    window.location.href = `/dashboard/ordens-servico/${orderId}`;
-  };
+  const handleViewOrder = useCallback(
+    (orderId: string) => {
+      router.push(`/dashboard/ordens-servico/${orderId}`);
+    },
+    [router],
+  );
 
-  const handleEditOrder = (orderId: string) => {
+  const handleEditOrder = useCallback((orderId: string) => {
     console.log("Editando ordem:", orderId);
     // Implementar lógica de edição
-  };
+  }, []);
 
-  const handlePrintOrder = (orderId: string) => {
+  const handlePrintOrder = useCallback((orderId: string) => {
     console.log("Imprimindo ordem:", orderId);
     // Implementar lógica de impressão
-  };
+  }, []);
 
-  const handlePayment = (orderId: string) => {
+  const handlePayment = useCallback((orderId: string) => {
     console.log("Processando pagamento:", orderId);
     // Implementar lógica de pagamento
-  };
+  }, []);
 
   return (
     <Card className={className}>
