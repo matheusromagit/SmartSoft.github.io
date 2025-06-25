@@ -123,7 +123,7 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
           </TabsContent>
 
           <TabsContent value="servicos" className="space-y-4">
-            <div className="h-[300px] w-full flex items-end justify-center gap-4 p-4 relative">
+            <div className="h-[300px] w-full flex items-end justify-center gap-4 px-4 pt-12 pb-4 relative">
               {faturamentoData.map((data, i) => {
                 // ALTURA DIRETA E SIMPLES: valor/máximo * altura disponível
                 const heightPx = (data.services / maxServices) * 250; // 250px máximo
