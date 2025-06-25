@@ -10,9 +10,17 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 
 export function DashboardAlerts() {
   const router = useRouter();
+
+  const handleNavigation = useCallback(
+    (path: string) => {
+      router.push(path);
+    },
+    [router],
+  );
 
   const alerts = [
     {
@@ -21,7 +29,7 @@ export function DashboardAlerts() {
       description: "5 itens com estoque abaixo do mínimo",
       icon: Package,
       color: "text-yellow-500",
-      action: () => router.push("/dashboard/estoque?tab=baixo-estoque"),
+      path: "/dashboard/estoque?tab=baixo-estoque",
     },
     {
       id: 2,
@@ -29,7 +37,7 @@ export function DashboardAlerts() {
       description: "3 ordens de serviço estão atrasadas",
       icon: ClipboardList,
       color: "text-red-500",
-      action: () => router.push("/dashboard/ordens-servico"),
+      path: "/dashboard/ordens-servico",
     },
     {
       id: 3,
@@ -37,7 +45,7 @@ export function DashboardAlerts() {
       description: "8 agendamentos programados para hoje",
       icon: Clock,
       color: "text-blue-500",
-      action: () => router.push("/dashboard/agendamentos"),
+      path: "/dashboard/agendamentos",
     },
   ];
 
