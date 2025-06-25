@@ -86,12 +86,10 @@ export function DashboardRecent({ className }: DashboardRecentProps) {
     },
   ];
 
-  const handleViewOrder = useCallback(
-    (orderId: string) => {
-      router.push(`/dashboard/ordens-servico/${orderId}`);
-    },
-    [router],
-  );
+  const handleViewOrder = useCallback((orderId: string) => {
+    setSelectedOrder(orderId);
+    setIsModalOpen(true);
+  }, []);
 
   const handleEditOrder = useCallback((orderId: string) => {
     console.log("Editando ordem:", orderId);
