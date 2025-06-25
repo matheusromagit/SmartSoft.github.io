@@ -61,7 +61,7 @@ export function DashboardAlerts() {
             <div
               key={alert.id}
               className="flex flex-col rounded-lg border p-4 transition-all hover:shadow-md hover:bg-accent/50 cursor-pointer group"
-              onClick={alert.action}
+              onClick={() => handleNavigation(alert.path)}
             >
               <div className="flex items-center gap-2">
                 <alert.icon className={`h-5 w-5 ${alert.color}`} />
