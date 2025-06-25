@@ -15,20 +15,20 @@ interface DashboardChartsProps {
 }
 
 export function DashboardCharts({ className }: DashboardChartsProps) {
-  // Dados de faturamento por mês (em R$)
+  // Dados de faturamento por mês (em R$) - valores mais variados
   const faturamentoData = [
-    { month: "Jan", value: 45000, services: 35 },
-    { month: "Fev", value: 52000, services: 42 },
-    { month: "Mar", value: 38000, services: 28 },
-    { month: "Abr", value: 48000, services: 38 },
-    { month: "Mai", value: 55000, services: 45 },
-    { month: "Jun", value: 62000, services: 52 },
-    { month: "Jul", value: 58000, services: 48 },
-    { month: "Ago", value: 51000, services: 41 },
+    { month: "Jan", value: 32000, services: 25 }, // Menor valor
+    { month: "Fev", value: 48000, services: 38 },
+    { month: "Mar", value: 41000, services: 32 },
+    { month: "Abr", value: 55000, services: 44 },
+    { month: "Mai", value: 62000, services: 50 },
+    { month: "Jun", value: 58000, services: 46 },
+    { month: "Jul", value: 71000, services: 57 },
+    { month: "Ago", value: 67000, services: 54 },
     { month: "Set", value: 59000, services: 47 },
-    { month: "Out", value: 65000, services: 55 },
-    { month: "Nov", value: 68000, services: 58 },
-    { month: "Dez", value: 72000, services: 62 },
+    { month: "Out", value: 64000, services: 51 },
+    { month: "Nov", value: 69000, services: 55 },
+    { month: "Dez", value: 78000, services: 63 }, // Maior valor
   ];
 
   const maxValue = Math.max(...faturamentoData.map((d) => d.value));
