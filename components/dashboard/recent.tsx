@@ -34,6 +34,7 @@ interface DashboardRecentProps {
 
 export function DashboardRecent({ className }: DashboardRecentProps) {
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
+  const router = useRouter();
 
   const recentOrders = [
     {
