@@ -1,18 +1,55 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from "react";
 
 interface DashboardChartsProps {
-  className?: string
+  className?: string;
 }
 
 export function DashboardCharts({ className }: DashboardChartsProps) {
+  // Dados de faturamento por mês (em R$)
+  const faturamentoData = [
+    { month: "Jan", value: 45000, services: 35 },
+    { month: "Fev", value: 52000, services: 42 },
+    { month: "Mar", value: 38000, services: 28 },
+    { month: "Abr", value: 48000, services: 38 },
+    { month: "Mai", value: 55000, services: 45 },
+    { month: "Jun", value: 62000, services: 52 },
+    { month: "Jul", value: 58000, services: 48 },
+    { month: "Ago", value: 51000, services: 41 },
+    { month: "Set", value: 59000, services: 47 },
+    { month: "Out", value: 65000, services: 55 },
+    { month: "Nov", value: 68000, services: 58 },
+    { month: "Dez", value: 72000, services: 62 },
+  ];
+
+  const maxValue = Math.max(...faturamentoData.map((d) => d.value));
+  const maxServices = Math.max(...faturamentoData.map((d) => d.services));
+
+  const [hoveredMonth, setHoveredMonth] = useState<string | null>(null);
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(value);
+  };
+
   return (
     <Card className={className}>
       <CardHeader>
         <CardTitle>Desempenho</CardTitle>
-        <CardDescription>Análise de faturamento e serviços</CardDescription>
+        <CardDescription>
+          Análise de faturamento e serviços mensais
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="faturamento">
@@ -21,39 +58,79 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
             <TabsTrigger value="servicos">Serviços</TabsTrigger>
           </TabsList>
           <TabsContent value="faturamento" className="space-y-4">
-            <div className="h-[300px] w-full flex items-end justify-between gap-2 pt-6">
-              {Array.from({ length: 12 }).map((_, i) => {
-                // Gera valores aleatórios para o gráfico
-                const height = 30 + Math.random() * 70
+            <div className="h-[300px] w-full flex items-end justify-between gap-1 pt-6 relative">
+              {faturamentoData.map((data, i) => {
+                const height = (data.value / maxValue) * 100;
+                const isHovered = hoveredMonth === data.month;
                 return (
-                  <div key={i} className="relative flex flex-col items-center">
-                    <div className="w-12 bg-primary rounded-t-md" style={{ height: `${height}%` }}></div>
-                    <span className="text-xs text-muted-foreground mt-2">
-                      {["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"][i]}
+                  <div
+                    key={i}
+                    className="relative flex flex-col items-center group"
+                  >
+                    <div
+                      className={`w-8 bg-primary rounded-t-md transition-all duration-200 cursor-pointer relative ${
+                        isHovered ? "opacity-80 scale-105" : "hover:opacity-80"
+                      }`}
+                      style={{ height: `${Math.max(height, 5)}%` }}
+                      onMouseEnter={() => setHoveredMonth(data.month)}
+                      onMouseLeave={() => setHoveredMonth(null)}
+                    >
+                      {isHovered && (
+                        <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-popover text-popover-foreground px-2 py-1 rounded text-xs whitespace-nowrap border shadow-md">
+                          {formatCurrency(data.value)}
+                        </div>
+                      )}
+                    </div>
+                    <span className="text-xs text-muted-foreground mt-2 font-medium">
+                      {data.month}
                     </span>
                   </div>
-                )
+                );
               })}
+            </div>
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>R$ 0</span>
+              <span>{formatCurrency(maxValue)}</span>
             </div>
           </TabsContent>
           <TabsContent value="servicos" className="space-y-4">
-            <div className="h-[300px] w-full flex items-end justify-between gap-2 pt-6">
-              {Array.from({ length: 12 }).map((_, i) => {
-                // Gera valores aleatórios para o gráfico
-                const height = 30 + Math.random() * 70
+            <div className="h-[300px] w-full flex items-end justify-between gap-1 pt-6 relative">
+              {faturamentoData.map((data, i) => {
+                const height = (data.services / maxServices) * 100;
+                const isHovered = hoveredMonth === data.month;
                 return (
-                  <div key={i} className="relative flex flex-col items-center">
-                    <div className="w-12 bg-green-500 rounded-t-md" style={{ height: `${height}%` }}></div>
-                    <span className="text-xs text-muted-foreground mt-2">
-                      {["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"][i]}
+                  <div
+                    key={i}
+                    className="relative flex flex-col items-center group"
+                  >
+                    <div
+                      className={`w-8 bg-green-500 rounded-t-md transition-all duration-200 cursor-pointer relative ${
+                        isHovered ? "opacity-80 scale-105" : "hover:opacity-80"
+                      }`}
+                      style={{ height: `${Math.max(height, 5)}%` }}
+                      onMouseEnter={() => setHoveredMonth(data.month)}
+                      onMouseLeave={() => setHoveredMonth(null)}
+                    >
+                      {isHovered && (
+                        <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-popover text-popover-foreground px-2 py-1 rounded text-xs whitespace-nowrap border shadow-md">
+                          {data.services} serviços
+                        </div>
+                      )}
+                    </div>
+                    <span className="text-xs text-muted-foreground mt-2 font-medium">
+                      {data.month}
                     </span>
                   </div>
-                )
+                );
               })}
+            </div>
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>0 serviços</span>
+              <span>{maxServices} serviços</span>
             </div>
           </TabsContent>
         </Tabs>
       </CardContent>
     </Card>
-  )
+  );
 }
