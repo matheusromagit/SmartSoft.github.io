@@ -123,7 +123,7 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
           </TabsContent>
 
           <TabsContent value="servicos" className="space-y-4">
-            <div className="h-[300px] w-full flex items-end justify-center gap-1 p-4 relative">
+            <div className="h-[300px] w-full flex items-end justify-center gap-4 p-4 relative">
               {faturamentoData.map((data, i) => {
                 // ALTURA DIRETA E SIMPLES: valor/máximo * altura disponível
                 const heightPx = (data.services / maxServices) * 250; // 250px máximo
@@ -141,8 +141,13 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
                     key={i}
                     className="relative flex flex-col items-center group"
                   >
+                    {/* Valor ACIMA da barra */}
+                    <span className="text-xs font-bold text-foreground mb-1">
+                      {data.services}
+                    </span>
+
                     <div
-                      className={`w-8 rounded-t-md transition-all duration-200 cursor-pointer relative flex items-end justify-center pb-1 ${
+                      className={`w-8 rounded-t-md transition-all duration-200 cursor-pointer relative ${
                         isHovered ? "opacity-80 scale-105" : "hover:opacity-80"
                       }`}
                       style={{
@@ -152,27 +157,19 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
                       onMouseEnter={() => setHoveredMonth(data.month)}
                       onMouseLeave={() => setHoveredMonth(null)}
                     >
-                      {/* Valor dentro da barra */}
-                      <span className="text-[10px] font-bold text-white">
-                        {data.services}
-                      </span>
-
                       {isHovered && (
-                        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 rounded text-xs whitespace-nowrap z-10">
+                        <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-black text-white px-2 py-1 rounded text-xs whitespace-nowrap z-10">
                           {data.services} serviços
                         </div>
                       )}
                     </div>
+
                     <span className="text-xs text-muted-foreground mt-2 font-medium">
                       {data.month}
                     </span>
                   </div>
                 );
               })}
-            </div>
-            <div className="flex justify-between text-xs text-muted-foreground px-4">
-              <span>{minServices} serviços</span>
-              <span>{maxServices} serviços</span>
             </div>
           </TabsContent>
         </Tabs>
