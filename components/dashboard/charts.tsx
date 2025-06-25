@@ -132,20 +132,25 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
           <TabsContent value="servicos" className="space-y-4">
             <div className="h-[280px] w-full flex items-end justify-between gap-2 p-4 relative">
               {faturamentoData.map((data, i) => {
-                const percentage = (data.services / maxServices) * 100;
-                const height = Math.max(percentage * 0.85, 8); // Altura proporcional real, mínimo 8%
-                const isHovered = hoveredMonth === data.month;
-
-                // Encontrar valores máximo e mínimo para colorir
                 const minServices = Math.min(
                   ...faturamentoData.map((d) => d.services),
                 );
-                const isMaxServices = data.services === maxServices;
-                const isMinServices = data.services === minServices;
 
-                let colorClass = "bg-blue-500";
-                if (isMaxServices) colorClass = "bg-green-500";
-                else if (isMinServices) colorClass = "bg-red-500";
+                // Calcular altura baseada no valor mínimo como base
+                const adjustedServices = data.services - minServices;
+                const adjustedMaxServices = maxServices - minServices;
+                const heightPercentage =
+                  adjustedMaxServices > 0
+                    ? (adjustedServices / adjustedMaxServices) * 80
+                    : 0;
+                const height = Math.max(heightPercentage, 5); // Altura mínima de 5%
+
+                const isHovered = hoveredMonth === data.month;
+                const barColor = getColorByValue(
+                  data.services,
+                  minServices,
+                  maxServices,
+                );
 
                 return (
                   <div
@@ -153,10 +158,14 @@ export function DashboardCharts({ className }: DashboardChartsProps) {
                     className="relative flex flex-col items-center group flex-1"
                   >
                     <div
-                      className={`w-full max-w-[32px] ${colorClass} rounded-t-md transition-all duration-200 cursor-pointer relative ${
+                      className={`w-full max-w-[32px] rounded-t-md transition-all duration-200 cursor-pointer relative ${
                         isHovered ? "opacity-80 scale-105" : "hover:opacity-80"
                       }`}
-                      style={{ height: `${height}%`, minHeight: "20px" }}
+                      style={{
+                        height: `${height + 15}%`, // +15% para base visual
+                        backgroundColor: barColor,
+                        minHeight: "25px",
+                      }}
                       onMouseEnter={() => setHoveredMonth(data.month)}
                       onMouseLeave={() => setHoveredMonth(null)}
                     >
