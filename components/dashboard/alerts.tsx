@@ -1,12 +1,18 @@
-"use client"
+"use client";
 
-import { Card, CardContent } from "@/components/ui/card"
-import { AlertTriangle, Clock, Package, ClipboardList, ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { useRouter } from "next/navigation"
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  AlertTriangle,
+  Clock,
+  Package,
+  ClipboardList,
+  ArrowRight,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export function DashboardAlerts() {
-  const router = useRouter()
+  const router = useRouter();
 
   const alerts = [
     {
@@ -33,7 +39,7 @@ export function DashboardAlerts() {
       color: "text-blue-500",
       action: () => router.push("/dashboard/agendamentos"),
     },
-  ]
+  ];
 
   return (
     <Card className="border-l-4 border-l-yellow-500">
@@ -44,20 +50,26 @@ export function DashboardAlerts() {
         </div>
         <div className="mt-4 grid gap-4 md:grid-cols-3">
           {alerts.map((alert) => (
-            <div key={alert.id} className="flex flex-col rounded-lg border p-4 transition-all hover:shadow-md">
+            <div
+              key={alert.id}
+              className="flex flex-col rounded-lg border p-4 transition-all hover:shadow-md hover:bg-accent/50 cursor-pointer group"
+              onClick={alert.action}
+            >
               <div className="flex items-center gap-2">
                 <alert.icon className={`h-5 w-5 ${alert.color}`} />
                 <h3 className="font-medium">{alert.title}</h3>
               </div>
-              <p className="mt-2 text-sm text-muted-foreground">{alert.description}</p>
-              <Button variant="ghost" className="mt-2 justify-start px-0 text-sm font-medium" onClick={alert.action}>
+              <p className="mt-2 text-sm text-muted-foreground">
+                {alert.description}
+              </p>
+              <div className="mt-2 flex items-center justify-start gap-1 text-sm font-medium text-primary group-hover:text-primary/80">
                 Ver detalhes
-                <ArrowRight className="ml-1 h-4 w-4" />
-              </Button>
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </div>
             </div>
           ))}
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
